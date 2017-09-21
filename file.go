@@ -39,3 +39,20 @@ func WriteLines(lines []string, path string) error {
 	}
 	return w.Flush()
 }
+
+// IsFile - true is path is a file
+func IsFile(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+
+	switch mode := fi.Mode(); {
+	case mode.IsDir():
+		return false
+	case mode.IsRegular():
+		return true
+	}
+
+	return false
+}
