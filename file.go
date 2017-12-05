@@ -3,6 +3,7 @@ package common
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -38,4 +39,27 @@ func WriteLines(lines []string, path string) error {
 		fmt.Fprintln(w, line)
 	}
 	return w.Flush()
+}
+
+// Copy the src file to dst. Any existing file will be overwritten and will not
+// copy file attributes.
+// credit: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
+func Copy(src, dst string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+
+	out, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, in)
+	if err != nil {
+		return err
+	}
+	return out.Close()
 }
