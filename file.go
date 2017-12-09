@@ -70,12 +70,12 @@ func Copy(src, dst string) error {
 
 // OperateOnDir - loop through files in the path and perform the Operation
 func OperateOnDir(path string, op Operation) {
-	filepath.Walk(boardPath, visitFunc(op))
+	filepath.Walk(path, visitFunc(op))
 }
 
 type Operation func(path string) error // nolint
 
-func visitFunc(op operation) filepath.WalkFunc {
+func visitFunc(op Operation) filepath.WalkFunc {
 	return func(path string, f os.FileInfo, err error) error {
 		return op(path)
 	}
