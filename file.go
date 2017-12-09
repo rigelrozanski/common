@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 // Credit: https://stackoverflow.com/questions/5884154/read-text-file-into-string-array-and-write
@@ -62,4 +63,20 @@ func Copy(src, dst string) error {
 		return err
 	}
 	return out.Close()
+}
+
+//___________________________________________________________________________________________-
+// Directory Processing
+
+// OperateOnDir - loop through files in the path and perform the Operation
+func OperateOnDir(path string, op Operation) {
+	filepath.Walk(boardPath, visitFunc(op))
+}
+
+type Operation func(path string) error // nolint
+
+func visitFunc(op operation) filepath.WalkFunc {
+	return func(path string, f os.FileInfo, err error) error {
+		return op(path)
+	}
 }
