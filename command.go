@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-// test test test
 // Execute - Execute the command, return standard output and error
 func Execute(command string) (stdOut string, err error) {
 	//split command into command and args
