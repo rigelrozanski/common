@@ -20,5 +20,6 @@ func Execute(command string) (stdOut string, err error) {
 		outByte, err = exec.Command(split[0], split[1:]...).Output()
 	}
 	stdOut = string(outByte)
+	stdOut = strings.Trim(stdOut, "\n") //trim any new lines
 	return
 }
