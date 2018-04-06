@@ -2,60 +2,71 @@ package common
 
 import (
 	"errors"
-	"fmt"
 	"os/exec"
 	"strings"
+	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 // Execute the command, return standard output and error
-func Execute(command string) (stdOut string, err error) {
+func ExecuteT(t *testing.T, command string) (out string) {
+
 	//split command into command and args
 	var outByte []byte
 	split := strings.Split(command, " ")
-	switch len(split) {
-	case 0:
-		return "", errors.New("no command provided")
-	case 1:
-		outByte, err = exec.Command(split[0]).CombinedOutput()
-	default:
-		outByte, err = exec.Command(split[0], split[1:]...).CombinedOutput()
-	}
-	stdOut = string(outByte)
-	stdOut = strings.Trim(stdOut, "\n") //trim any new lines
-	return
+	require.NotZero(t, len(split), "no command provided")
+	cmd := exec.Command(split[:]...)
+	bz, err := cmd.CombinedOutput()
+	require.NoError(t, err)
+	out = strings.Trim(string(bz), "\n") //trim any new lines
+	return out
 }
 
-// Execute a bunch o' commands, return standard outputs and error
-func ExecuteCmds(commands []string, print, haltOnError bool) (stdOuts []string, errs []error) {
+// Asynchronously execute the command, return standard output and error
+func GoExecuteT(t *testing.T, command string) (process *exec.Process, out chan string) {
+	//split command into command and args
+	var outByte []byte
+	split := strings.Split(command, " ")
+	require.NotZero(t, len(split), "no command provided")
+	cmd := exec.Command(split[:]...)
+	go func() {
+		bz, err = cmd.CombinedOutput()
+		require.NoError(t, err)
+	}()
+	out = strings.Trim(string(bz), "\n") //trim any new lines
+	return cmd.Process, stdOut
+}
 
-	stdOuts = make([]string, len(commands))
-	if haltOnError {
-		errs = make([]error, 1)
-	} else {
-		errs = make([]error, len(commands))
+//___________________________________________________________________________________________-
+
+// Execute the command, return standard output and error
+func Execute(command string) (out string, err error) {
+	//split command into command and args
+	var outByte []byte
+	split := strings.Split(command, " ")
+	if len(split) == 0 {
+		return nil, "", errors.New("no command provided")
 	}
+	cmd := exec.Command(split[:]...)
+	bz, err := cmd.CombinedOutput()
+	out = strings.Trim(string(bz), "\n") //trim any new lines
+	return out, err
+}
 
-	errI := 0
-	for i, command := range commands {
-
-		stdOut, err := Execute(command)
-		if err != nil {
-
-			err = fmt.Errorf("Error in command \"%v\":\n%s", command, err)
-			errs[errI] = err
-			errI++
-
-			if print {
-				fmt.Println(err)
-			}
-			if haltOnError {
-				return
-			}
-		}
-		if print {
-			fmt.Println(stdOut)
-		}
-		stdOuts[i] = stdOut
+// Asynchronously execute the command, return standard output and error
+func GoExecute(command string) (process *exec.Process, out chan string, err chan error) {
+	//split command into command and args
+	var outByte []byte
+	var cmd *exec.Cmd
+	split := strings.Split(command, " ")
+	if len(split) == 0 {
+		return nil, "", errors.New("no command provided")
 	}
-	return
+	cmd = exec.Command(split[:]...)
+	go func() {
+		bz, err = cmd.CombinedOutput()
+	}()
+	out = strings.Trim(string(bz), "\n") //trim any new lines
+	return cmd.Process, stdOut, err
 }
