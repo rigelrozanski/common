@@ -39,6 +39,10 @@ import (
 //___________________________________________________________________________________________-
 
 // Execute the command, return standard output and error
+//func Execute(command string, fmtArgs ...string) (out string, err error) {
+//if len(fmtArgs) > 0 {
+//command = fmt.Sprintf(command, fmtArgs...)
+//}
 func Execute(command string) (out string, err error) {
 	//split command into command and args
 	split := strings.Split(command, " ")
@@ -58,6 +62,10 @@ func Execute(command string) (out string, err error) {
 }
 
 // Asynchronously execute the command, return standard output and error
+//func GoExecute(command string, fmtArgs ...string) (pipe io.WriteCloser, outChan chan string, errChan chan error, err error) {
+//if len(fmtArgs) > 0 {
+//command = fmt.Sprintf(command, fmtArgs...)
+//}
 func GoExecute(command string) (pipe io.WriteCloser, outChan chan string, errChan chan error, err error) {
 	//split command into command and args
 	split := strings.Split(command, " ")
