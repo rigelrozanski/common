@@ -42,6 +42,14 @@ func WriteLines(lines []string, path string) error {
 	return w.Flush()
 }
 
+// test if the file exists
+func FileExists(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
 // Copy the src file to dst. Any existing file will be overwritten and will not
 // copy file attributes.
 // credit: https://stackoverflow.com/questions/21060945/simple-way-to-copy-a-file-in-golang
