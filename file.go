@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path"
 	"path/filepath"
 )
 
@@ -100,13 +101,13 @@ func GetRelPath(absPath, file string) (string, error) {
 
 	goPath, _ := os.LookupEnv("GOPATH")
 
-	relBoardsPath, err := filepath.Rel(curPath, pathL.Join(goPath,
+	relBoardsPath, err := filepath.Rel(curPath, path.Join(goPath,
 		absPath))
 
 	//create the boards directory if it doesn't exist
 	os.Mkdir(relBoardsPath, os.ModePerm)
 
-	relWbPath := pathL.Join(relBoardsPath, file)
+	relWbPath := path.Join(relBoardsPath, file)
 
 	return relWbPath, err
 }
