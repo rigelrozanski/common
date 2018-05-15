@@ -88,3 +88,25 @@ func visitFunc(op Operation) filepath.WalkFunc {
 		return op(path)
 	}
 }
+
+//___________________________________________________________________________________________-
+
+// get the relative path to current loco
+func GetRelPath(absPath, file string) (string, error) {
+	curPath, err := filepath.Abs("")
+	if err != nil {
+		return "", err
+	}
+
+	goPath, _ := os.LookupEnv("GOPATH")
+
+	relBoardsPath, err := filepath.Rel(curPath, pathL.Join(goPath,
+		absPath))
+
+	//create the boards directory if it doesn't exist
+	os.Mkdir(relBoardsPath, os.ModePerm)
+
+	relWbPath := pathL.Join(relBoardsPath, file)
+
+	return relWbPath, err
+}
