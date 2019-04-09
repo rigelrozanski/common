@@ -2,8 +2,10 @@ package common
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -43,6 +45,18 @@ func WriteLines(lines []string, path string) error {
 	return w.Flush()
 }
 
+// replaces all strings in file
+func ReplaceAllStringInFile(path, origStr, newStr string) error {
+	input, err := ioutil.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	output := bytes.Replace(input, []byte(origStr), []byte(newStr), -1)
+
+	return ioutil.WriteFile(path, output, 0666)
+}
+
 // test if the file exists
 func FileExists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -72,6 +86,11 @@ func Copy(src, dst string) error {
 		return err
 	}
 	return out.Close()
+}
+
+// move a file
+func Move(src, dst string) error {
+	return os.Rename(src, dst)
 }
 
 //___________________________________________________________________________________________-
