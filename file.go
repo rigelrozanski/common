@@ -45,6 +45,15 @@ func WriteLines(lines []string, path string) error {
 	return w.Flush()
 }
 
+func CreateEmptyFile(path string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	file.Close()
+	return nil
+}
+
 // replaces all strings in file
 func ReplaceAllStringInFile(path, origStr, newStr string) error {
 	input, err := ioutil.ReadFile(path)
@@ -57,7 +66,7 @@ func ReplaceAllStringInFile(path, origStr, newStr string) error {
 	return ioutil.WriteFile(path, output, 0666)
 }
 
-// test if the file exists
+// test if the file or folder exists
 func FileExists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		return false
