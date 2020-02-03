@@ -1,4 +1,4 @@
-package common
+package colour
 
 import "math"
 
