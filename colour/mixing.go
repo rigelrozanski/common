@@ -8,6 +8,15 @@ type FRGB struct {
 	B float64
 }
 
+// NewFRGB creates a new FRGB object
+func NewFRGB(r float64, g float64, b float64) FRGB {
+    return FRGB {
+        R: r, 
+        G: g, 
+        B: b, 
+    }
+}
+
 // map[inputNo]proportions
 type InputProportions []float64
 

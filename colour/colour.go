@@ -109,3 +109,7 @@ func (c Colour) WithinVarianceSubBrightness(target Colour, brightness, variance 
 	}
 	return true
 }
+
+func (c Colour) ToFRGB() FRGB {
+	return NewFRGB(float64(c.R), float64(c.G), float64(c.B))
+}
