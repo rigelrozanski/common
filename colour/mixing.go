@@ -1,6 +1,11 @@
 package colour
 
-import "math"
+import (
+	"fmt"
+	"math"
+
+	gcolor "github.com/gookit/color"
+)
 
 type FRGB struct {
 	R float64
@@ -8,13 +13,19 @@ type FRGB struct {
 	B float64
 }
 
+func (c FRGB) PrintColour(rightHandText string) {
+	clib := gcolor.RGB(uint8(c.R/257), uint8(c.G/257), uint8(c.B/257), true) // bg color
+	clib.Print("  ")
+	fmt.Printf(" %v", rightHandText)
+}
+
 // NewFRGB creates a new FRGB object
 func NewFRGB(r float64, g float64, b float64) FRGB {
-    return FRGB {
-        R: r, 
-        G: g, 
-        B: b, 
-    }
+	return FRGB{
+		R: r,
+		G: g,
+		B: b,
+	}
 }
 
 // map[inputNo]proportions
