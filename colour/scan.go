@@ -6,7 +6,7 @@ import (
 )
 
 // outsideY represents the first y coordinate outside the colour
-func getCalibrationColour(setStartX, setEndX, searchStartY, caliSearchMaxY, thick int, variance uint32,
+func GetCalibrationColour(setStartX, setEndX, searchStartY, caliSearchMaxY, thick int, variance uint32,
 	img image.Image) (caliColour Colour, outsideY int, err error) {
 
 	caliStartY, caliEndY := 0, 0
