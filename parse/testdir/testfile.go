@@ -8,7 +8,7 @@ func somefunc() {
 
 // First Comment
 // Second Comment
-type TestInter interface {
+type TestInter interface { // HEY
 	FirstTestFn(hello string) string
 	SecondTestFn() (goodbye int)
 	ThirdTestFn(mixed string, input, types bool) (a, bunch string, of, outputs bool)
@@ -17,7 +17,11 @@ type TestInter interface {
 	SixthTestFn(fnInput func(func(bloop string)) string) func()
 }
 
-type TestStrct struct {
+/*
+SOME BIG COMMENT
+IN STARS
+*/
+type TestStrct struct { // HELLO
 	firstVar  string
 	secondVar string
 	thirdVar  string

@@ -10,7 +10,7 @@ import (
 // AUX debugging function
 func FullParseAndPrintFile(file string) {
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, file, nil, 0)
+	f, err := parser.ParseFile(fset, file, nil, parser.ParseComments)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -19,20 +19,27 @@ func FullParseAndPrintFile(file string) {
 
 type ParsedGoFile struct {
 	parsedInterfaces []ParsedInterface
-	parsedStruct     []ParsedStruct
+	parsedStructs    []ParsedStruct
 }
 
 func ParseFile(file string) (out ParsedGoFile) {
 	fset := token.NewFileSet()
-	f, err := parser.ParseFile(fset, file, nil, 0)
+	pc := NewParseContext(fset)
+	f, err := parser.ParseFile(fset, file, nil, parser.ParseComments)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	for _, decl := range f.Decls {
-		infc, found := ParseInterface(fset, decl)
+		infc, found := pc.ParseInterface(decl)
 		if found {
 			out.parsedInterfaces = append(out.parsedInterfaces, infc)
+			continue
+		}
+		strct, found := pc.ParseStruct(decl)
+		if found {
+			out.parsedStructs = append(out.parsedStructs, strct)
+			continue
 		}
 	}
 	return out
