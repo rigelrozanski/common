@@ -12,6 +12,17 @@ type ParsedStruct struct {
 	EndLine   int
 }
 
+// GetParsedStruct
+func GetCurrentParsedStruct(file string, lineNo int) (strct ParsedStruct, found bool) {
+	pfile := ParseFile
+	for _, st := range pfile.parsedStructs {
+		if st.StartLine <= lineNo && lineNo <= pfile.EndLine {
+			return st, true
+		}
+	}
+	return strct, false
+}
+
 // NewParsedStruct creates a new ParsedStruct object
 func NewParsedStruct(name string, fields []ParsedField, comment []string, startLine int, endLine int) ParsedStruct {
 	return ParsedStruct{
