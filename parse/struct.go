@@ -14,9 +14,9 @@ type ParsedStruct struct {
 
 // GetParsedStruct
 func GetCurrentParsedStruct(file string, lineNo int) (strct ParsedStruct, found bool) {
-	pfile := ParseFile
+	pfile := ParseFile(file)
 	for _, st := range pfile.parsedStructs {
-		if st.StartLine <= lineNo && lineNo <= pfile.EndLine {
+		if st.StartLine <= lineNo && lineNo <= st.EndLine {
 			return st, true
 		}
 	}
