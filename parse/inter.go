@@ -16,6 +16,7 @@ type ParsedInterface struct {
 
 type ParsedInterfaceFunc struct {
 	StartLine     int
+	FuncName      string        // SomeFuncName
 	RecreatedCode string        // SomeFuncName(input string) string
 	OutputFields  []ParsedField // all the output fields, ordered
 }
@@ -77,9 +78,11 @@ func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found
 		fnName := fn.Names[0].Name
 		fnLine := pc.fset.PositionFor(fn.Names[0].NamePos, false).Line
 		fnStr := fmt.Sprintf("%v(%v) %v", fnName, paramsConcat, resultsConcat)
+
 		out.Functions = append(out.Functions,
 			ParsedInterfaceFunc{
 				StartLine:     fnLine,
+				FuncName:      fnName,
 				RecreatedCode: fnStr,
 				OutputFields:  outFlds,
 			})
