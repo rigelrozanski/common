@@ -16,7 +16,20 @@ type ParsedInterface struct {
 
 type ParsedInterfaceFunc struct {
 	StartLine     int
-	RecreatedCode string // SomeFuncName(input string) string
+	RecreatedCode string        // SomeFuncName(input string) string
+	OutputFields  []ParsedField // all the output fields, ordered
+}
+
+func GetCurrentParsedInterface(file string, lineNo int) (
+	inter ParsedInterface, found bool) {
+
+	pfile := ParseFile(file)
+	for _, in := range pfile.parsedInterfaces {
+		if in.StartLine <= lineNo && lineNo <= in.EndLine {
+			return in, true
+		}
+	}
+	return ParsedInterface{}, false
 }
 
 func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found bool) {
@@ -56,7 +69,7 @@ func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found
 		_, paramsConcat := pc.FieldList(fnType.Params)
 
 		// Get all the function results
-		_, resultsConcat := pc.FieldList(fnType.Results)
+		outFlds, resultsConcat := pc.FieldList(fnType.Results)
 		if strings.Contains(resultsConcat, " ") {
 			resultsConcat = fmt.Sprintf("(%v)", resultsConcat)
 		}
@@ -68,6 +81,7 @@ func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found
 			ParsedInterfaceFunc{
 				StartLine:     fnLine,
 				RecreatedCode: fnStr,
+				OutputFields:  outFlds,
 			})
 
 	}

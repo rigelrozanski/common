@@ -26,4 +26,6 @@ type TestStrct struct { // HELLO
 	secondVar []string
 	thirdVar  map[string]int
 	fourthVar map[string][]int
+	fifthVar  interface{}
+	sixthVar  map[string]interface{}
 }
