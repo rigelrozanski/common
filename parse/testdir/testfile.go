@@ -23,6 +23,7 @@ IN STARS
 */
 type TestStrct struct { // HELLO
 	firstVar  string
-	secondVar string
-	thirdVar  string
+	secondVar []string
+	thirdVar  map[string]int
+	fourthVar map[string][]int
 }

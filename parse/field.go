@@ -47,22 +47,15 @@ OUTER:
 
 		var fldTypeStr string
 		var pos token.Pos
-		switch ft := field.Type.(type) {
-		case *ast.Ident:
-			if len(fieldsConcat) > 0 {
-				fieldsConcat += " "
-			}
-			fldTypeStr = ft.Name
-			pos = ft.NamePos
-		case *ast.FuncType:
-			if len(fieldsConcat) > 0 {
-				fieldsConcat += " "
-			}
-			fldTypeStr = pc.FuncTypeString(ft)
-			pos = ft.Func
-		default:
+		pos, fldTypeStr, found := pc.ExprTypeString(field.Type)
+
+		if !found {
 			// undefined type, move along
 			continue OUTER
+		}
+
+		if len(fieldsConcat) > 0 {
+			fieldsConcat += " "
 		}
 		fieldsConcat += fmt.Sprintf("%v, ", fldTypeStr)
 
@@ -75,6 +68,39 @@ OUTER:
 	}
 
 	return flds, fieldsConcat
+}
+
+func (pc ParseContext) ExprTypeString(expr ast.Expr) (pos token.Pos, fldTypeStr string, found bool) {
+	switch et := expr.(type) {
+	case *ast.Ident:
+		fldTypeStr = et.Name
+		pos = et.NamePos
+	case *ast.ArrayType:
+		_, arrType, found := pc.ExprTypeString(et.Elt)
+		if !found {
+			return 0, "", false
+		}
+		fldTypeStr = fmt.Sprintf("[]%v", arrType)
+		pos = et.Lbrack
+	case *ast.MapType:
+		pos = et.Map
+		_, keyStr, found := pc.ExprTypeString(et.Key)
+
+		if !found {
+			return 0, "", false
+		}
+		_, valStr, found := pc.ExprTypeString(et.Value)
+		if !found {
+			return 0, "", false
+		}
+		fldTypeStr = fmt.Sprintf("map[%v]%v", keyStr, valStr)
+	case *ast.FuncType:
+		fldTypeStr = pc.FuncTypeString(et)
+		pos = et.Func
+	default:
+		return 0, "", false
+	}
+	return pos, fldTypeStr, true
 }
 
 func (pc ParseContext) FuncTypeString(ft *ast.FuncType) string {
