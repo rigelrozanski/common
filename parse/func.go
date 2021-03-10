@@ -76,7 +76,7 @@ func (pc ParseContext) ParseFunc(decl ast.Decl) (out ParsedFunc, found bool) {
 	sl := pc.fset.PositionFor(fd.Body.Lbrace, false).Line
 	el := pc.fset.PositionFor(fd.Body.Rbrace, false).Line
 	rc, _ := pc.FuncTypeString(fd.Type)
-	rcfi := name + string(rc[4:len(rc)-1])
+	rcfi := name + string(rc[4:len(rc)])
 
 	out = NewParsedFunc(name, fnOf, rc, rcfi, comment, sl, el)
 	return out, true
