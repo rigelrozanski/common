@@ -48,9 +48,13 @@ func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found
 
 	out.Name = spec.Name.Name
 	out.Comment = comment
-	out.CommentStartLine = commentStartLine
 	out.StartLine = pc.fset.PositionFor(it.Methods.Opening, false).Line
 	out.EndLine = pc.fset.PositionFor(it.Methods.Closing, false).Line
+	if len(comment) > 0 {
+		out.CommentStartLine = commentStartLine
+	} else {
+		out.CommentStartLine = out.StartLine
+	}
 
 	fns := it.Methods.List
 	for _, fn := range fns {

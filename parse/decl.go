@@ -12,8 +12,13 @@ func (pc ParseContext) GetSpecAndComment(decl ast.Decl) (spec *ast.TypeSpec, com
 	if !ok {
 		return spec, comment, commentStartLine, false
 	}
-	commentStartLine = pc.fset.PositionFor(declGen.Doc.Pos(), false).Line
-	comment = strings.Split(declGen.Doc.Text(), `\n`)
+	commentText := declGen.Doc.Text()
+	if len(commentText) > 0 {
+		comment = strings.Split(declGen.Doc.Text(), `\n`)
+		if len(comment) > 0 {
+			commentStartLine = pc.fset.PositionFor(declGen.Doc.Pos(), false).Line
+		}
+	}
 	if declGen.Tok != token.TYPE {
 		return spec, comment, commentStartLine, false
 	}

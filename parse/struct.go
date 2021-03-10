@@ -64,6 +64,9 @@ func (pc ParseContext) ParseStruct(decl ast.Decl) (out ParsedStruct, found bool)
 	startLine := pc.fset.PositionFor(strct.Fields.Opening, false).Line
 	endLine := pc.fset.PositionFor(strct.Fields.Closing, false).Line
 
+	if len(comment) == 0 {
+		commentStartLine = startLine
+	}
 	out = NewParsedStruct(name, flds, comment, commentStartLine, startLine, endLine)
 	return out, true
 }
