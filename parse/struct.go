@@ -5,11 +5,12 @@ import (
 )
 
 type ParsedStruct struct {
-	Name      string
-	Fields    []ParsedField
-	Comment   []string
-	StartLine int
-	EndLine   int
+	Name             string
+	Fields           []ParsedField
+	Comment          []string
+	CommentStartLine int
+	StartLine        int
+	EndLine          int
 }
 
 // get the struct (if it exists) containing the lineNo within the given file.
@@ -34,20 +35,21 @@ func GetCurrentParsedStruct(file string, lineNo int) (
 
 // NewParsedStruct creates a new ParsedStruct object
 func NewParsedStruct(name string, fields []ParsedField,
-	comment []string, startLine int, endLine int) ParsedStruct {
+	comment []string, commentStartLine, startLine, endLine int) ParsedStruct {
 
 	return ParsedStruct{
-		Name:      name,
-		Fields:    fields,
-		Comment:   comment,
-		StartLine: startLine,
-		EndLine:   endLine,
+		Name:             name,
+		Fields:           fields,
+		Comment:          comment,
+		CommentStartLine: startLine,
+		StartLine:        startLine,
+		EndLine:          endLine,
 	}
 }
 
 func (pc ParseContext) ParseStruct(decl ast.Decl) (out ParsedStruct, found bool) {
 
-	spec, comment, found := GetSpecAndComment(decl)
+	spec, comment, commentStartLine, found := pc.GetSpecAndComment(decl)
 	if !found {
 		return out, false
 	}
@@ -62,6 +64,6 @@ func (pc ParseContext) ParseStruct(decl ast.Decl) (out ParsedStruct, found bool)
 	startLine := pc.fset.PositionFor(strct.Fields.Opening, false).Line
 	endLine := pc.fset.PositionFor(strct.Fields.Closing, false).Line
 
-	out = NewParsedStruct(name, flds, comment, startLine, endLine)
+	out = NewParsedStruct(name, flds, comment, commentStartLine, startLine, endLine)
 	return out, true
 }

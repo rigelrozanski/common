@@ -13,10 +13,8 @@ type TestInter interface { // HEY
 	SixthTestFn(fnInput func(func(bloop string)) string) func()
 }
 
-/*
-SOME BIG COMMENT
-IN STARS
-*/
+//SOME BIG COMMENT
+//IN STARS
 type TestStrct struct { // HELLO
 	firstVar  string
 	secondVar []string
@@ -31,6 +29,6 @@ func somefunc() {
 }
 
 // some commment
-func (s TestStruct) AnotherFunc(in string) string {
+func (s TestStrct) AnotherFunc(in string) string {
 	return ""
 }

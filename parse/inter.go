@@ -7,11 +7,12 @@ import (
 )
 
 type ParsedInterface struct {
-	Name      string
-	Functions []ParsedInterfaceFunc
-	Comment   []string
-	StartLine int
-	EndLine   int
+	Name             string
+	Functions        []ParsedInterfaceFunc
+	Comment          []string
+	CommentStartLine int
+	StartLine        int
+	EndLine          int
 }
 
 type ParsedInterfaceFunc struct {
@@ -35,7 +36,7 @@ func GetCurrentParsedInterface(file string, lineNo int) (
 
 func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found bool) {
 
-	spec, comment, found := GetSpecAndComment(decl)
+	spec, comment, commentStartLine, found := pc.GetSpecAndComment(decl)
 	if !found {
 		return out, false
 	}
@@ -47,6 +48,7 @@ func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found
 
 	out.Name = spec.Name.Name
 	out.Comment = comment
+	out.CommentStartLine = commentStartLine
 	out.StartLine = pc.fset.PositionFor(it.Methods.Opening, false).Line
 	out.EndLine = pc.fset.PositionFor(it.Methods.Closing, false).Line
 
