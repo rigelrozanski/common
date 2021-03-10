@@ -13,6 +13,11 @@ type TestInter interface { // HEY
 	SixthTestFn(fnInput func(func(bloop string)) string) func()
 }
 
+// TestStrctI mirrors the struct TestStrct (DNETL)
+type TestStrctI interface {
+	AnotherFunc(in string) string
+}
+
 //SOME BIG COMMENT
 //IN STARS
 type TestStrct struct { // HELLO

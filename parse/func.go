@@ -31,24 +31,26 @@ func GetAllFuncsOfStruct(packageDir, structName string) (pf []ParsedFunc) {
 }
 
 type ParsedFunc struct {
-	Name          string
-	FunctionOf    string
-	RecreatedCode string
-	Comment       []string
-	StartLine     int
-	EndLine       int
+	Name                  string
+	FunctionOf            string
+	RecreatedCode         string
+	RecreatedCodeForInter string
+	Comment               []string
+	StartLine             int
+	EndLine               int
 }
 
 // NewParsedFunc creates a new ParsedFunc object
-func NewParsedFunc(name, functionOf, recreatedCode string,
+func NewParsedFunc(name, functionOf, recreatedCode, recreatedCodeForInter string,
 	comment []string, startLine, endLine int) ParsedFunc {
 	return ParsedFunc{
-		Name:          name,
-		FunctionOf:    functionOf,
-		RecreatedCode: recreatedCode,
-		Comment:       comment,
-		StartLine:     startLine,
-		EndLine:       endLine,
+		Name:                  name,
+		FunctionOf:            functionOf,
+		RecreatedCode:         recreatedCode,
+		RecreatedCodeForInter: recreatedCodeForInter,
+		Comment:               comment,
+		StartLine:             startLine,
+		EndLine:               endLine,
 	}
 }
 
@@ -74,8 +76,9 @@ func (pc ParseContext) ParseFunc(decl ast.Decl) (out ParsedFunc, found bool) {
 	sl := pc.fset.PositionFor(fd.Body.Lbrace, false).Line
 	el := pc.fset.PositionFor(fd.Body.Rbrace, false).Line
 	rc, _ := pc.FuncTypeString(fd.Type)
+	rcfi := name + string(rc[4:len(rc)-1])
 
-	out = NewParsedFunc(name, fnOf, rc, comment, sl, el)
+	out = NewParsedFunc(name, fnOf, rc, rcfi, comment, sl, el)
 	return out, true
 }
 

@@ -103,7 +103,7 @@ func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found
 func InterfaceCodeFromFuncs(interName string, pf []ParsedFunc, enterChar string) string {
 	out := fmt.Sprintf("type %v interface {%v", interName, enterChar)
 	for _, fn := range pf {
-		out += fmt.Sprintf("    %v%v", fn.RecreatedCode, enterChar)
+		out += fmt.Sprintf("    %v%v", fn.RecreatedCodeForInter, enterChar)
 	}
 	out += fmt.Sprintf("}%v", enterChar)
 	return out
