@@ -90,3 +90,15 @@ func (pc ParseContext) ParseInterface(decl ast.Decl) (out ParsedInterface, found
 	}
 	return out, true
 }
+
+// -----------------------------------------------------
+
+// enterChar could be \n or \r
+func InterfaceCodeFromFuncs(interName string, pf []ParsedFunc, enterChar string) string {
+	out := fmt.Sprintf("type %v interface {%v", interName, enterChar)
+	for _, fn := range pf {
+		out += fmt.Sprintf("    %v%v", fn.RecreatedCode, enterChar)
+	}
+	out += fmt.Sprintf("}%v", enterChar)
+	return out
+}

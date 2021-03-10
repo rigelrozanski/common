@@ -2,10 +2,6 @@ package main
 
 import "fmt"
 
-func somefunc() {
-	fmt.Println("vim-go")
-}
-
 // First Comment
 // Second Comment
 type TestInter interface { // HEY
@@ -28,4 +24,13 @@ type TestStrct struct { // HELLO
 	fourthVar map[string][]int
 	fifthVar  interface{}
 	sixthVar  map[string]interface{}
+}
+
+func somefunc() {
+	fmt.Println("vim-go")
+}
+
+// some commment
+func (s TestStruct) AnotherFunc(in string) string {
+	return ""
 }

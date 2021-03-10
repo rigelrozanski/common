@@ -20,6 +20,7 @@ func FullParseAndPrintFile(file string) {
 type ParsedGoFile struct {
 	parsedInterfaces []ParsedInterface
 	parsedStructs    []ParsedStruct
+	parsedFuncs      []ParsedFunc
 }
 
 func ParseFile(file string) (out ParsedGoFile) {
@@ -39,6 +40,11 @@ func ParseFile(file string) (out ParsedGoFile) {
 		strct, found := pc.ParseStruct(decl)
 		if found {
 			out.parsedStructs = append(out.parsedStructs, strct)
+			continue
+		}
+		fn, found := pc.ParseFunc(decl)
+		if found {
+			out.parsedFuncs = append(out.parsedFuncs, fn)
 			continue
 		}
 	}

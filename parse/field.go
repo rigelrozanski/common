@@ -143,30 +143,3 @@ func (pc ParseContext) ExprTypeString(expr ast.Expr) (
 	}
 	return pos, fldTypeStr, dummyFulfill, true
 }
-
-func (pc ParseContext) FuncTypeString(ft *ast.FuncType) (typeString, dummyFulfill string) {
-	typeString = "func("
-	_, outP := pc.FieldList(ft.Params)
-	typeString += outP
-	typeString += ")"
-
-	flds, res := pc.FieldList(ft.Results)
-	if len(res) > 0 {
-		typeString += " " + res
-	}
-	dummyFulfill = typeString
-
-	if len(res) > 0 {
-		dummyFnReturn := ""
-		for _, fld := range flds {
-			if len(dummyFnReturn) > 0 {
-				dummyFnReturn += ", "
-			}
-			dummyFnReturn += fld.DummyFulfill
-		}
-		dummyFulfill += fmt.Sprintf("{ return %v }", dummyFnReturn)
-	} else {
-		dummyFulfill += "{}"
-	}
-	return typeString, dummyFulfill
-}
