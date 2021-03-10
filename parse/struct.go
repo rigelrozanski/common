@@ -41,7 +41,7 @@ func NewParsedStruct(name string, fields []ParsedField,
 		Name:             name,
 		Fields:           fields,
 		Comment:          comment,
-		CommentStartLine: startLine,
+		CommentStartLine: commentStartLine,
 		StartLine:        startLine,
 		EndLine:          endLine,
 	}
