@@ -15,7 +15,7 @@ func GetAllFuncsOfStruct(packageDir, structName string) (pf []ParsedFunc) {
 	}
 	for _, file := range fileInfo {
 		fname := file.Name()
-		if file.IsDir() || !strings.HasSuffix("fname", ".go") {
+		if file.IsDir() || !strings.HasSuffix(fname, ".go") {
 			continue
 		}
 		fpath := path.Join(packageDir, fname)
